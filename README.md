@@ -13,12 +13,18 @@ See the `example` directory.
 ## Add repo tags
 
     export DHUBREPO=myuser
-    docker build --target librealsense -t $DHUBREPO/librealsense:latest -t $DHUBREPO/librealsense:2.34.0 -t $DHUBREPO/librealsense:2.34.0-alpine -t $DHUBREPO/librealsense:2.34.0-alpine-3.11 .
+    export IMGARCH=`uname -m`
+    docker build --target librealsense \
+           -t $DHUBREPO/librealsense:$IMGARCH-latest \
+           -t $DHUBREPO/librealsense:$IMGARCH-2.34.0 \
+           -t $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine \
+           -t $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine-3.11 \
+           .
 
 ### Push to repo
 
     docker login
-    docker push $DHUBREPO/librealsense:latest
-    docker push $DHUBREPO/librealsense:2.34.0
-    docker push $DHUBREPO/librealsense:2.34.0-alpine
-    docker push $DHUBREPO/librealsense:2.34.0-alpine-3.11
+    docker push $DHUBREPO/librealsense:$IMGARCH-latest
+    docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0
+    docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine
+    docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine-3.11

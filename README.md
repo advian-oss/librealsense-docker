@@ -28,3 +28,9 @@ See the `example` directory.
     docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0
     docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine
     docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine-3.11
+
+### Create manifests
+
+See <https://docs.docker.com/engine/reference/commandline/manifest/>
+
+Then run `create_manifests.py` to get a list of commands and run them.

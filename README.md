@@ -2,6 +2,10 @@
 
 Dockerfile for compiling librealsense on Alpine.
 
+## Using
+
+See the `example` directory.
+
 ## Build librealsense image itself
 
     docker build --target librealsense -t librealsense:latest -t librealsense:2.34.0 -t librealsense:2.34.0-alpine -t librealsense:2.34.0-alpine-3.11 .

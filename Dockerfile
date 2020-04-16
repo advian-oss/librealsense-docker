@@ -106,6 +106,17 @@ RUN cd /usr/src/librealsense-$RS_VERSION \
     && echo "/opt/librealsense/current/lib64" >>/etc/ld-musl-$(uname -m).path \
     && true
 
+# Move debug symbols to separate directory
+RUN  for objfile in $(find /opt/ -type f -name '*.so*' -or -name '*.a*'); do \
+       dbgfile=$(echo "$objfile" | awk -F/ '{OFS=FS}{$3=$3"-dbg";print $0".dbg"}') ; \
+       mkdir -p $(dirname "$dbgfile") ; \
+       objcopy --only-keep-debug "$objfile" "$dbgfile" ; \
+       strip "$objfile" ; \
+       objcopy --add-gnu-debuglink="$dbgfile" "$objfile" ; \
+     done \
+     && true
+
+
 ########################
 # Minimal librealsense #
 ########################
@@ -127,3 +138,11 @@ RUN echo "/lib:/usr/local/lib:/usr/lib" >>/etc/ld-musl-$(uname -m).path \
     && echo "/opt/librealsense/current/lib64" >>/etc/ld-musl-$(uname -m).path \
     && true
 WORKDIR /opt/librealsense/current/
+
+
+##########################
+# Debugging librealsense #
+##########################
+FROM librealsense as librealsense-dbg
+COPY --from=librealsense_build /opt/librealsense-dbg /opt/librealsense-dbg
+COPY --from=librealsense_build /opt/apriltag-dbg /opt/apriltag-dbg

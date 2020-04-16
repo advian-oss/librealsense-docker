@@ -35,9 +35,9 @@ if __name__ == "__main__":
 
     if os.environ.get("AUTORUN"):
         for cmd in tag_commands:
-            subprocess.run(cmd, check=True, shell=True)
+            subprocess.run(" ".join(cmd), check=True, shell=True)
         for cmd in push_commands:
-            subprocess.run(cmd, check=True, shell=True)
+            subprocess.run(" ".join(cmd), check=True, shell=True)
     else:
         print("** Run the following commands:")
         for cmd in tag_commands:

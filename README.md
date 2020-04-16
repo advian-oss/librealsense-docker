@@ -8,6 +8,8 @@ See the `example` directory.
 
 ## Docker hub
 
+Pro tip: add `AUTORUN=1` if you like to live dangerously.
+
 ### Building
 
 Run `crate_builds.py` to get list of commands to run to create and push all the tag variants.

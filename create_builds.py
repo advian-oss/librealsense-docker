@@ -3,6 +3,7 @@
 import os
 import sys
 import subprocess
+import itertools
 
 from create_manifests import BUILDS, TAGS, ARCHS
 
@@ -30,13 +31,9 @@ if __name__ == "__main__":
         build_commands.append(buildcmd)
 
     if os.environ.get("AUTORUN"):
-        for cmd in build_commands:
-            subprocess.run(" ".join(cmd), check=True, shell=True)
-        for cmd in push_commands:
+        for cmd in itertools.chain(build_commands, push_commands):
             subprocess.run(" ".join(cmd), check=True, shell=True)
     else:
         print("** Run the following commands:")
-        for cmd in build_commands:
-            print(" ".join(cmd))
-        for cmd in push_commands:
+        for cmd in itertools.chain(build_commands, push_commands):
             print(" ".join(cmd))

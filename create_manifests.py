@@ -3,6 +3,8 @@
 import os
 import sys
 import subprocess
+import itertools
+
 
 ARCHS = ["x86_64", "aarch64"]
 TAGS = ["latest", "2.34.0", "2.34.0-alpine", "2.34.0-alpine-3.11"]
@@ -34,9 +36,7 @@ if __name__ == "__main__":
             push_commands.append(["docker", "manifest", "push", manifestag])
 
     if os.environ.get("AUTORUN"):
-        for cmd in tag_commands:
-            subprocess.run(" ".join(cmd), check=True, shell=True)
-        for cmd in push_commands:
+        for cmd in itertools.chain(tag_commands, push_commands):
             subprocess.run(" ".join(cmd), check=True, shell=True)
     else:
         print("** Run the following commands:")

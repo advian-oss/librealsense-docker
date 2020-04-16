@@ -16,7 +16,7 @@ if __name__ == "__main__":
         sys.exit(1)
     tag_commands = []
     inspect_commands = []
-    push_commands = []
+    push_commands = [["docker", "login"]]
     for build in BUILDS:
         for tag in TAGS:
             manifestag = "{repo}/{build}:{tag}".format(

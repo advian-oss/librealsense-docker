@@ -6,31 +6,20 @@ Dockerfile for compiling librealsense on Alpine.
 
 See the `example` directory.
 
-## Build librealsense image itself
+## Docker hub
 
-    docker build --target librealsense -t librealsense:latest -t librealsense:2.34.0 -t librealsense:2.34.0-alpine -t librealsense:2.34.0-alpine-3.11 .
+Pro tip: add `AUTORUN=1` if you like to live dangerously.
 
-## Add repo tags
+### Building
 
-    export DHUBREPO=myuser
-    export IMGARCH=`uname -m`
-    docker build --target librealsense \
-           -t $DHUBREPO/librealsense:$IMGARCH-latest \
-           -t $DHUBREPO/librealsense:$IMGARCH-2.34.0 \
-           -t $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine \
-           -t $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine-3.11 \
-           .
+Run `crate_builds.py` to get list of commands to run to create and push all the tag variants.
 
-### Push to repo
+    DHUBREPO=myrepo IMGARCH=`uname -m` ./crate_builds.py
 
-    docker login
-    docker push $DHUBREPO/librealsense:$IMGARCH-latest
-    docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0
-    docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine
-    docker push $DHUBREPO/librealsense:$IMGARCH-2.34.0-alpine-3.11
-
-### Create manifests
+### Multiarch manifests
 
 See <https://docs.docker.com/engine/reference/commandline/manifest/>
 
 Then run `create_manifests.py` to get a list of commands and run them.
+
+    DHUBREPO=myrepo ./create_manifests.py

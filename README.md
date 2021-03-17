@@ -35,9 +35,7 @@ available on the host:
 
     export DHUBREPO=myrepo
     ./create_builds.py librealsense > librealsense.hcl
-    ./create_builds.py librealsense-dbg > librealsense-dbg.hcl
     docker login
     docker buildx bake --push --file ./librealsense.hcl
-    docker buildx bake --push --file ./librealsense-dbg.hcl
 
 The `create_builds.py` script output includes the Docker commands above as HCL file comments.

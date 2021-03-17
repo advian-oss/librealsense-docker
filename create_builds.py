@@ -16,21 +16,18 @@ if __name__ == "__main__":
         print("Define DHUBREPO")
         sys.exit(1)
 
-    if len(sys.argv) != 2 or not sys.argv[1] in TARGETS:
-        print(f"""Specify target, one of: {", ".join(TARGETS)}""")
-        sys.exit(1)
-    target = sys.argv[1]
     distros = [variant.split("-")[0] for variant in VARIANTS]
 
     hcl_targets = ""
-    for rsversion in RS_VERSIONS:
-        latestag = ""
-        if rsversion == LATEST_RS:
-            latestag = f""", "{reponame}/{target}:latest" """
-        for variant in VARIANTS:
-            distro, distroversion = variant.split("-")
-            dockerfile = f"Dockerfile_{distro}"
-            hcl_targets += f"""
+    for target in TARGETS:
+        for rsversion in RS_VERSIONS:
+            latestag = ""
+            if rsversion == LATEST_RS:
+                latestag = f""", "{reponame}/{target}:latest" """
+            for variant in VARIANTS:
+                distro, distroversion = variant.split("-")
+                dockerfile = f"Dockerfile_{distro}"
+                hcl_targets += f"""
 target "{target}:{distro}" {{
     dockerfile = "{dockerfile}"
     platforms = [{", ".join(f'"{platform}"' for platform in PLATFORMS)}]

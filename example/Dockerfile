@@ -1,7 +1,8 @@
+ARG REALSENSE_IMG=advian/librealsense:latest
 ######################
 # Base builder image #
 ######################
-FROM eeroafheurlin/librealsense:2.34.0-alpine-3.11 as builder_base
+FROM $REALSENSE_IMG as builder_base
 # Very basic compiler deps
 RUN apk --no-cache add \
     curl \
@@ -30,7 +31,7 @@ RUN mkdir build && cd build \
 #####################
 # Minimal app image #
 #####################
-FROM eeroafheurlin/librealsense:2.34.0-alpine-3.11 as myapp
+FROM $REALSENSE_IMG as myapp
 COPY --from=builder /usr/src/rs-reset/build/rs-reset /usr/local/bin
 
 ENTRYPOINT [ "sh", "-c" ]

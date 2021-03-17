@@ -3,10 +3,11 @@
 import os
 import sys
 
+LATEST_RS = "2.42.0"
 PLATFORMS = ["linux/amd64", "linux/arm64"]
 TARGETS = ["librealsense", "librealsense-dbg"]
 VARIANTS = ["alpine-3.13"]
-RS_VERSIONS = ["2.42.0"]
+RS_VERSIONS = [LATEST_RS]  # More library versions can be built if desired, just add the versions here
 
 
 if __name__ == "__main__":
@@ -23,6 +24,9 @@ if __name__ == "__main__":
 
     hcl_targets = ""
     for rsversion in RS_VERSIONS:
+        latestag = ""
+        if rsversion == LATEST_RS:
+            latestag = f""", "{reponame}/{target}:latest" """
         for variant in VARIANTS:
             distro, distroversion = variant.split("-")
             dockerfile = f"Dockerfile_{distro}"
@@ -34,7 +38,7 @@ target "{target}:{distro}" {{
     args = {{
         RS_VERSION = "{rsversion}"
     }}
-    tags = ["{reponame}/{target}:{rsversion}", "{reponame}/{target}:{rsversion}-{distro}", "{reponame}/{target}:{rsversion}-{distro}-{distroversion}"]
+    tags = ["{reponame}/{target}:{rsversion}", "{reponame}/{target}:{rsversion}-{distro}", "{reponame}/{target}:{rsversion}-{distro}-{distroversion}"{latestag}]
 }}
 """
 

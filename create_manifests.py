@@ -7,7 +7,7 @@ import itertools
 
 
 ARCHS = ["x86_64", "aarch64"]
-TAGS = ["latest", "2.34.0", "2.34.0-alpine", "2.34.0-alpine-3.11"]
+TAGS = ["latest", "2.42.0", "2.42.0-alpine", "2.42.0-alpine-3.13"]
 BUILDS = ["librealsense", "librealsense-dbg"]
 
 

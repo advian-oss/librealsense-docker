@@ -1,7 +1,7 @@
 #############################
 # Base stage for all builds #
 #############################
-FROM alpine:3.11 as build_env
+FROM alpine:3.13 as build_env
 
 # Very basic compiler deps
 RUN apk --no-cache add \
@@ -19,10 +19,10 @@ RUN apk --no-cache add \
 # Build apriltag #
 ##################
 FROM build_env as apriltag_build
-ENV AP_VERSION=3.1.1
+ENV AP_VERSION=3.1.4
 
 WORKDIR /usr/src
-RUN curl https://codeload.github.com/AprilRobotics/apriltag/tar.gz/$AP_VERSION -o apriltag.tar.gz \
+RUN curl https://codeload.github.com/AprilRobotics/apriltag/tar.gz/v$AP_VERSION -o apriltag.tar.gz \
     && tar -xzf apriltag.tar.gz \
     && cd /usr/src/apriltag-$AP_VERSION \
     && mkdir build && cd build \
@@ -35,7 +35,7 @@ RUN curl https://codeload.github.com/AprilRobotics/apriltag/tar.gz/$AP_VERSION -
 ####################
 # Minimal apriltag #
 ####################
-FROM alpine:3.11 as apriltag
+FROM alpine:3.13 as apriltag
 COPY --from=apriltag_build /opt/apriltag /opt/apriltag
 # Add the libraries to "ldconfig"
 RUN echo "/lib:/usr/local/lib:/usr/lib" >>/etc/ld-musl-$(uname -m).path \
@@ -48,7 +48,7 @@ RUN echo "/lib:/usr/local/lib:/usr/lib" >>/etc/ld-musl-$(uname -m).path \
 ######################
 FROM build_env as librealsense_build
 
-ENV RS_VERSION=2.34.0
+ENV RS_VERSION=2.42.0
 
 COPY --from=apriltag /opt/apriltag /opt/apriltag
 
@@ -120,7 +120,7 @@ RUN  for objfile in $(find /opt/ -type f -name '*.so*' -or -name '*.a*'); do \
 ########################
 # Minimal librealsense #
 ########################
-FROM alpine:3.11 as librealsense
+FROM alpine:3.13 as librealsense
 
 # Runtime deps
 RUN apk --no-cache add \

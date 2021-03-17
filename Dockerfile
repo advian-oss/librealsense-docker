@@ -19,7 +19,7 @@ RUN apk --no-cache add \
 # Build apriltag #
 ##################
 FROM build_env as apriltag_build
-ENV AP_VERSION=3.1.4
+ARG AP_VERSION=3.1.4
 
 WORKDIR /usr/src
 RUN curl https://codeload.github.com/AprilRobotics/apriltag/tar.gz/v$AP_VERSION -o apriltag.tar.gz \
@@ -48,7 +48,7 @@ RUN echo "/lib:/usr/local/lib:/usr/lib" >>/etc/ld-musl-$(uname -m).path \
 ######################
 FROM build_env as librealsense_build
 
-ENV RS_VERSION=2.42.0
+ARG RS_VERSION=2.42.0
 
 COPY --from=apriltag /opt/apriltag /opt/apriltag
 

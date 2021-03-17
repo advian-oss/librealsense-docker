@@ -6,20 +6,38 @@ Dockerfile for compiling librealsense on Alpine.
 
 See the `example` directory.
 
-## Docker hub
+## Building images
 
-Pro tip: add `AUTORUN=1` if you like to live dangerously.
+### Enable `buildx`
 
-### Building
+On x86 Linux, the following _may_ be necessary to install `buildx`:
 
-Run `crate_builds.py` to get list of commands to run to create and push all the tag variants.
+    export DOCKER_BUILDKIT=1
+    docker build --platform=local -o . git://github.com/docker/buildx
+    mkdir -p ~/.docker/cli-plugins
+    mv buildx ~/.docker/cli-plugins/docker-buildx
 
-    DHUBREPO=myrepo IMGARCH=`uname -m` ./crate_builds.py
+### Enable `docker/binfmt`
 
-### Multiarch manifests
+In order to be able to build images for foreign architectures, the `docker/binfmt`
+image should pulled and run. This will make [`qemu-user-static`](https://github.com/multiarch/qemu-user-static)
+available on the host:
 
-See <https://docs.docker.com/engine/reference/commandline/manifest/>
+    docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64  # latest as of 2020-10-20
 
-Then run `create_manifests.py` to get a list of commands and run them.
+### Create a "builder" instance
 
-    DHUBREPO=myrepo ./create_manifests.py
+    docker buildx create --name librealsensebuilder
+    docker buildx use librealsensebuilder
+    docker buildx inspect --bootstrap
+
+### Build and push
+
+    export DHUBREPO=myrepo
+    ./create_builds.py librealsense > librealsense.hcl
+    ./create_builds.py librealsense-dbg > librealsense-dbg.hcl
+    docker login
+    docker buildx bake --push --file ./librealsense.hcl
+    docker buildx bake --push --file ./librealsense-dbg.hcl
+
+The `create_builds.py` script output includes the Docker commands above as HCL file comments.
